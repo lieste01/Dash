@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 #import os
-import plotly.graph_objects as go
+import plotly.express as px
 import streamlit as st
 
 
@@ -45,7 +45,7 @@ def matrixCalor(data, jana):
                 elif col[num2] == 0:
                     matrix[num][num2] = 0
                 else:
-                    matrix[num][num2] = round((float(col[num]) / float(col[num2])) - 1, 2) * 100
+                    matrix[num][num2] = round((float(col[num]) / float(col[num2])) - 1, 2)
 
     matrix = [linha[1:] for linha in matrix[1:]]
 
@@ -66,10 +66,7 @@ def matrixCalor(data, jana):
     # plt.tight_layout()
     # return plt.savefig(f'{os.getcwd()}\\matrix.jpg')
 
-    fig_corr = go.Figure(go.Heatmap(z=matrix_df.values,
-                                    x=matrix_df.index.values,
-                                    y=matrix_df.columns.values,
-                                    showscale=False))
+    fig_corr = px.imshow(matrix_df, text_auto=True)
 
 
     fig_corr.update_layout(height=500,
