@@ -1,5 +1,5 @@
 import streamlit as st
-import Matrix
+import matrix
 import datetime
 
 
@@ -11,7 +11,7 @@ optionJana = st.selectbox("Escolha uma TS:", jana)
 
 data = st.date_input("Escolha uma data:", datetime.date(2023, 8, 2))
 
-Matrix.matrixCalor(data, optionJana)
+matrix.matrixCalor(data, optionJana)
 
 #image = Image.open('matrix.jpg')
 
