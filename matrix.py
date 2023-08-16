@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
-import os
+#import os
 import plotly.graph_objects as go
 import streamlit as st
 
 
 def matrixCalor(data, jana):
-    dataFrame = pd.read_excel(f"{os.getcwd()}\\Temp Enr.xlsx")
+    #dataFrame = pd.read_excel(f"{os.getcwd()}\\Temp Enr.xlsx")
+    dataFrame = pd.read_excel(f"Temp Enr.xlsx")
 
     nameColumns = ['Data']
 
