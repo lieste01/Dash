@@ -2,12 +2,11 @@ import datetime
 
 import numpy as np
 import pandas as pd
-import plotly.express as px
-import streamlit as st
+from openpyxl import Workbook
 
-
-def matrixCalor(dataframe, data, jana, titulo):
-    dataFrame = pd.read_excel(f"{dataframe}.xlsx")
+def matrixCalor(data, jana):
+    #dataFrame = pd.read_excel(f"{os.getcwd()}\\Temp Enr.xlsx")
+    dataFrame = pd.read_excel(f"Temp Enr.xlsx")
 
     nameColumns = ['Data']
 
@@ -41,10 +40,8 @@ def matrixCalor(dataframe, data, jana, titulo):
         for num in range(1, len(df_filtered.columns)):
             for num2 in range(1, len(df_filtered.columns)):
                 if col[num] == 0:
-                    print("IF")
                     matrix[num][num2] = 0
                 elif col[num2] == 0:
-                    print("ELIF")
                     matrix[num][num2] = 0
                 else:
                     matrix[num][num2] = round((float(col[num]) / float(col[num2])) - 1, 2)
@@ -54,47 +51,46 @@ def matrixCalor(dataframe, data, jana, titulo):
     # Converter a matriz para um dataframe para que as datas sejam os rótulos das linhas e colunas
     matrix_df = pd.DataFrame(matrix, columns=colunas, index=colunas)
 
-    fig_corr = px.imshow(matrix_df, text_auto=True)
+    return matrix_df
 
-    fig_corr.update_layout(height=500,
-                           width=700,
-                           margin={'l': 50, 'r': 50, 't': 50, 'b': 50},
-                           title_text=f"{titulo}",
-                           title_x=0.1
-                           )
+janas = ['Jana 15', 'Jana 16', 'Jana 17', 'Jana 18', 'Jana 19', 'Jana 20']
 
-    st.plotly_chart(fig_corr, theme=None, use_container_width=True)
+dataFrame = pd.read_excel(f"Temp Enr.xlsx")
+matrixCrunch = []
+for data in dataFrame["Data"].dt.strftime("%Y-%m-%d"):
+    for jana in janas:
+        matrix = matrixCalor(data, jana)
+        matrix["Data"] = data
+        matrixCrunch.append(matrix)
 
 
-def horaTemp(dataframe, data, jana, titulo):
-    dataFrame = pd.read_excel(f"{dataframe}.xlsx")
+dtCrunch = [pd.DataFrame(layer) for layer in matrixCrunch]
 
-    nameColumns = ['Data']
 
-    # Cria uma array com os novos nomes das colunas
-    for usina in range(1, 21):
-        for ts in range(1, 8):
-            nameColumns.append(f"Jana {usina} - TS {ts}")
 
-    # Muda o nome das colunas, substitution com os nomes da array nameColumns
-    dataFrame.columns = nameColumns
+# Criar um novo arquivo Excel
+wb = Workbook()
 
-    # Transforma a coluna Data em Date
-    dataFrame['Data'] = dataFrame['Data'].dt.strftime("%Y-%m-%d %H:%M:%S")
-    dataFrame.index = pd.to_datetime(dataFrame['Data'])
+# Adicionar cada DataFrame como uma aba no arquivo Excel
+for idx, df in enumerate(dtCrunch):
+    lista = df.columns[0]
+    sheet = wb.create_sheet(title=f"{df['Data'][0][5:10]}-{lista[0][:7]}")
 
-    # Substitui os valores [-11059] No Good Data For Calculation para 0
-    dataFrame = dataFrame.replace('[-11059] No Good Data For Calculation', 0)
-    dataFrame = dataFrame.replace('[-11057] Not Enough Values For Calculation', 0)
+    # Preencher os nomes das colunas a partir da coluna 2
+    for c_idx, col_name in enumerate(df.columns, start=2):
+        sheet.cell(row=1, column=c_idx, value=col_name)
 
-    # Filtro usando indexação booleana
-    dataInc = pd.to_datetime(data)
-    dataFin = dataInc + datetime.timedelta(hours=23, minutes=59)
+    # Preencher os nomes das linhas e valores
+    for r_idx, (row_name, row_data) in enumerate(df.iterrows(), start=2):
+        sheet.cell(row=r_idx, column=1, value=row_name)
+        for c_idx, value in enumerate(row_data, start=2):
+            sheet.cell(row=r_idx, column=c_idx, value=value)
 
-    df_filtered = dataFrame[(dataFrame.index >= dataInc)][
-        [f'{jana}']]
+# Remover a aba de planilha padrão
+default_sheet = wb.get_sheet_by_name('Sheet')
+wb.remove_sheet(default_sheet)
 
-    df_filtered = df_filtered[(df_filtered.index <= dataFin)]
+# Salvar o arquivo Excel
+wb.save('dataframes.xlsx')
 
-    fig = px.line(df_filtered, title=titulo)
-    st.plotly_chart(fig)
+print("Exportação concluída.")
