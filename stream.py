@@ -1,7 +1,6 @@
 import streamlit as st
 import matrix
 import datetime
-from streamlit_option_menu import option_menu
 
 potAtiva = "Pot Ativa"
 tempAmb = "TempAmb"
@@ -9,11 +8,6 @@ tempEnr = "Temp Enr"
 TempOleo = "Temp Oleo"
 
 st.set_page_config(page_title="Matriz", page_icon="🔅", layout="wide",  menu_items=None)
-
-# with st.sidebar:
-#     selected = option_menu("Main Menu", ["Home", 'Settings'],
-#                            icons=['house', 'gear'], menu_icon="cast", default_index=1)
-#     selected
 
 jana = ['Jana 1', 'Jana 2', 'Jana 3', 'Jana 4', 'Jana 5', 'Jana 6', 'Jana 7', 'Jana 8', 'Jana 9', 'Jana 10',
         'Jana 11', 'Jana 12', 'Jana 13', 'Jana 14', 'Jana 15', 'Jana 16', 'Jana 17', 'Jana 18', 'Jana 19', 'Jana 20']
