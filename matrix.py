@@ -91,7 +91,28 @@ def horaTemp(dataframe, data, jana, titulo):
     dataInc = pd.to_datetime(data)
     dataFin = dataInc + datetime.timedelta(hours=23, minutes=59)
 
-    df_filtered = dataFrame[dataFrame.index >= dataInc][[f'{jana} - TS 1']]
+    dic = {"Jana 1": "Jana 2",
+           "Jana 2": "Jana 3",
+           "Jana 3": "Jana 2",
+           "Jana 4": "Jana 3",
+           "Jana 5": "Jana 6",
+           "Jana 6": "Jana 5",
+           "Jana 7": "Jana 8",
+           "Jana 8": "Jana 7",
+           "Jana 9": "Jana 10",
+           "Jana 10": "Jana 9",
+           "Jana 11": "Jana 17",
+           "Jana 12": "Jana 15",
+           "Jana 13": "Jana 14",
+           "Jana 14": "Jana 13",
+           "Jana 15": "Jana 12",
+           "Jana 16": "Jana 17",
+           "Jana 17": "Jana 16",
+           "Jana 18": "Jana 19",
+           "Jana 19": "Jana 20",
+           "Jana 20": "Jana 19"}
+
+    df_filtered = dataFrame[dataFrame.index >= dataInc][[f'{jana} - TS 1', f'{dic[jana]} - TS 1']]
 
     df_filtered = df_filtered[df_filtered.index <= dataFin]
 
