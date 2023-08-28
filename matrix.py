@@ -91,10 +91,9 @@ def horaTemp(dataframe, data, jana, titulo):
     dataInc = pd.to_datetime(data)
     dataFin = dataInc + datetime.timedelta(hours=23, minutes=59)
 
-    df_filtered = dataFrame[(dataFrame.index >= dataInc)][
-        [f'{jana}']]
+    df_filtered = dataFrame[dataFrame.index >= dataInc][[f'{jana} - TS 1']]
 
-    df_filtered = df_filtered[(df_filtered.index <= dataFin)]
+    df_filtered = df_filtered[df_filtered.index <= dataFin]
 
     fig = px.line(df_filtered, title=titulo)
     st.plotly_chart(fig)
