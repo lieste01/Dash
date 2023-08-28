@@ -14,7 +14,7 @@ jana = ['Jana 1', 'Jana 2', 'Jana 3', 'Jana 4', 'Jana 5', 'Jana 6', 'Jana 7', 'J
 
 col1, col2 = st.columns(2, gap="large")
 optionJana = col1.selectbox("Escolha uma TS:", jana)
-data = col2.date_input(label="Escolha uma data:", value=datetime.datetime.today(), min_value=datetime.date(2023, 8, 2), max_value=datetime.datetime.today())
+data = col2.date_input(label="Escolha uma data:", value=datetime.datetime.today()+datetime.timedelta(-1), min_value=datetime.date(2023, 8, 2), max_value=datetime.datetime.today())
 
 with col1:
     matrix.matrixCalor(potAtiva, data, optionJana, "Matrix de Dados de Potência Ativa dos Eletrocentros (Trafos WEG)")
